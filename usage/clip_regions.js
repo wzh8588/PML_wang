@@ -36,6 +36,7 @@ imgcol = imgcol.map(function(img){ return img.clip(region); });
 // var range  = [-180, -60, 180, 90];
 var scale  = 1 / 20, //1/240,
     drive  = true,
-    folder = 'PMLV2basin'; //
+    folder = 'PMLV2basin', 
+    crs    = 'EPSG:4326'; //
 
-pkg_export.ExportImgCol(imgcol, undefined, range, scale, drive, folder);
+pkg_export.ExportImgCol(imgcol, undefined, range, scale, drive, folder, crs);
