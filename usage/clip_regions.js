@@ -40,4 +40,9 @@ var cellsize = 1 / 20, //1/240,
     folder = 'PMLV2AU', 
     crs    = 'EPSG:4326'; //
 
+var date_begin = '2012-07-27', 
+    date_end   = '2017-12-31';
+    
+imgcol = imgcol.filterDate(date_begin, date_end);
+
 pkg_export.ExportImgCol(imgcol, undefined, range, cellsize, type, folder, crs);
