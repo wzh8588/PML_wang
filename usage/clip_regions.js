@@ -40,4 +40,4 @@ var cellsize = 1 / 20, //1/240,
     folder = 'PMLV2AU', 
     crs    = 'EPSG:4326'; //
 
-pkg_export.ExportImgCol(imgcol.limit(2), undefined, range, cellsize, type, folder, crs);
+pkg_export.ExportImgCol(imgcol, undefined, range, cellsize, type, folder, crs);
