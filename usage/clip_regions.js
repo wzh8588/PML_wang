@@ -28,7 +28,7 @@ print(range);
 // Map.addLayer(bound, {}, 'bounds');
 /** clip regional data */
 // imgcol = imgcol.map(function(img){ return img.clip(region); });
-range = [[88, 26.7, 90, 23.6]];
+range = [88, 26.7, 90, 23.6];
 
 // print(region);
 // print(imgcol.limit(10));
@@ -37,13 +37,12 @@ range = [[88, 26.7, 90, 23.6]];
 // var range  = [-180, -60, 180, 90];
 var cellsize = 1 / 240, //1/240,
     type   = 'drive',
-    folder = 'PMLV2AU', 
+    folder = 'PMLV2BL', 
     crs    = 'EPSG:4326'; //
 
-var date_begin = '2000-02-01', 
+var date_begin = '2012-07-27', 
     date_end   = '2017-12-31';
     
 imgcol = imgcol.filterDate(date_begin, date_end);
 
 pkg_export.ExportImgCol(imgcol, undefined, range, cellsize, type, folder, crs);
-
