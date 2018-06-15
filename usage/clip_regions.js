@@ -34,10 +34,10 @@ print(range);
 // print(imgcol.limit(10));
 // Map.addLayer(region);
 
-var range  = [81.330816, 23.752, 91.205579, 28.173538];
+range  = [81.330816, 23.752, 91.205579, 28.173538];
 var cellsize =  0.0044915764//1 / 20, //1/240,
     type   = 'drive',
-    folder = 'PMLV2AU', 
+    folder = 'PMLV2_Indus', 
     crs    = 'EPSG:4326'; //
 
 var date_begin = '2001-02-01', 
