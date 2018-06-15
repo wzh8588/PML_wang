@@ -28,7 +28,7 @@ print(range);
 // Map.addLayer(bound, {}, 'bounds');
 /** clip regional data */
 // imgcol = imgcol.map(function(img){ return img.clip(region); });
-range = [81.330816, 23.752, 91.205579, 28.173538];
+var range = [81.330816, 23.752, 91.205579, 28.173538];
 
 // print(region);
 // print(imgcol.limit(10));
