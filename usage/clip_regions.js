@@ -28,21 +28,22 @@ print(range);
 // Map.addLayer(bound, {}, 'bounds');
 /** clip regional data */
 // imgcol = imgcol.map(function(img){ return img.clip(region); });
-//var range = [81.330816, 23.752, 91.205579, 28.173538];
+range = [112, -44, 154, -9];
 
 // print(region);
 // print(imgcol.limit(10));
 // Map.addLayer(region);
 
-range  = [81.330816, 23.752, 91.205579, 28.173538];
-var cellsize =  0.0044915764//1 / 20, //1/240,
+// var range  = [-180, -60, 180, 90];
+var cellsize = 1 / 20, //1/240,
     type   = 'drive',
-    folder = 'PMLV2_Indus', 
+    folder = 'PMLV2AU', 
     crs    = 'EPSG:4326'; //
 
-var date_begin = '2001-02-01', 
+var date_begin = '2000-02-01', 
     date_end   = '2017-12-31';
     
 imgcol = imgcol.filterDate(date_begin, date_end);
 
 pkg_export.ExportImgCol(imgcol, undefined, range, cellsize, type, folder, crs);
+
