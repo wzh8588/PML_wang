@@ -28,14 +28,14 @@ print(range);
 // Map.addLayer(bound, {}, 'bounds');
 /** clip regional data */
 // imgcol = imgcol.map(function(img){ return img.clip(region); });
-range = [112, -44, 154, -9];
+range = [[88, 26.7, 90, 23.6]];
 
 // print(region);
 // print(imgcol.limit(10));
 // Map.addLayer(region);
 
 // var range  = [-180, -60, 180, 90];
-var cellsize = 1 / 20, //1/240,
+var cellsize = 1 / 240, //1/240,
     type   = 'drive',
     folder = 'PMLV2AU', 
     crs    = 'EPSG:4326'; //
