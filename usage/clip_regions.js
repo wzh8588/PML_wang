@@ -27,16 +27,17 @@ print(range);
 
 // Map.addLayer(bound, {}, 'bounds');
 /** clip regional data */
-imgcol = imgcol.map(function(img){ return img.clip(region); });
+// imgcol = imgcol.map(function(img){ return img.clip(region); });
+range = [112, -44, 154, -9];
 
 // print(region);
 // print(imgcol.limit(10));
 // Map.addLayer(region);
 
 // var range  = [-180, -60, 180, 90];
-var scale  = 1 / 240, //1/240,
-    drive  = true,
-    folder = 'PMLV2basin', 
+var cellsize = 1 / 240, //1/240,
+    type   = 'drive',
+    folder = 'PMLV2AU', 
     crs    = 'EPSG:4326'; //
 
-pkg_export.ExportImgCol(imgcol, undefined, range, scale, drive, folder, crs);
+pkg_export.ExportImgCol(imgcol.limit(2), undefined, range, cellsize, type, folder, crs);
