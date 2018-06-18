@@ -42,7 +42,7 @@ var cellsize = 0.0044915764,//1 / 240, //1/240,
     folder = 'PMLV2BL', 
     crs    = 'EPSG:4326'; //
 
-var date_begin = '2017-08-31';//'2000-02-01', 
+var date_begin = '2017-08-31',//'2000-02-01', 
     date_end   = '2017-12-31';
     
 imgcol = imgcol.filterDate(date_begin, date_end);
