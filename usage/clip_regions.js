@@ -37,7 +37,7 @@ range = [87.9989652323483, 23.5987425138198, 90.0022083159349, 26.7069133968734]
 // Map.addLayer(region);
 
 // var range  = [-180, -60, 180, 90];
-var cellsize = 1 / 240, //1/240,
+var cellsize = 0.0044915764//1 / 240, //1/240,
     type   = 'drive',
     folder = 'PMLV2BL', 
     crs    = 'EPSG:4326'; //
