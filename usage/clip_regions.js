@@ -27,24 +27,16 @@ print(range);
 
 // Map.addLayer(bound, {}, 'bounds');
 /** clip regional data */
-// imgcol = imgcol.map(function(img){ return img.clip(region); });
-
-//87.9989652323483 90.0022083159349 23.5987425138198 26.7069133968734
-range = [87.9989652323483, 23.5987425138198, 90.0022083159349, 26.7069133968734]; //[lon_min, lat_min, lon_max, lat_max]
+imgcol = imgcol.map(function(img){ return img.clip(region); });
 
 // print(region);
 // print(imgcol.limit(10));
 // Map.addLayer(region);
 
 // var range  = [-180, -60, 180, 90];
-var cellsize = 0.0044915764,//1 / 240, //1/240,
-    type   = 'drive',
-    folder = 'PMLV2BL', 
+var scale  = 1 / 20, //1/240,
+    drive  = true,
+    folder = 'PMLV2basin', 
     crs    = 'EPSG:4326'; //
 
-var date_begin = '2000-02-01', 
-    date_end   = '2017-12-31';
-    
-imgcol = imgcol.filterDate(date_begin, date_end);
-
-pkg_export.ExportImgCol(imgcol, undefined, range, cellsize, type, folder, crs);
+pkg_export.ExportImgCol(imgcol, undefined, range, scale, drive, folder, crs);
