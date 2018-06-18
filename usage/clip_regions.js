@@ -47,4 +47,4 @@ var date_begin = '2017-08-31',//'2000-02-01',
     
 imgcol = imgcol.filterDate(date_begin, date_end);
 
-pkg_export.ExportImgCol(imgcol, undefined, range, cellsize, type, folder, crs);
+pkg_export.ExportImgCol(imgcol.select([1, 2,3]), undefined, range, cellsize, type, folder, crs);
