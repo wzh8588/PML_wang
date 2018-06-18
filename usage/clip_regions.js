@@ -28,19 +28,19 @@ print(range);
 // Map.addLayer(bound, {}, 'bounds');
 /** clip regional data */
 // imgcol = imgcol.map(function(img){ return img.clip(region); });
-range = [112, -44, 154, -9];
+range = [137, -31, 147, -21];
 
 // print(region);
 // print(imgcol.limit(10));
 // Map.addLayer(region);
 
 // var range  = [-180, -60, 180, 90];
-var cellsize = 1 / 20, //1/240,
+var cellsize = 1 / 240, //1/240,
     type   = 'drive',
     folder = 'PMLV2AU', 
     crs    = 'EPSG:4326'; //
 
-var date_begin = '2012-07-27', 
+var date_begin = '2002-07-04', 
     date_end   = '2017-12-31';
     
 imgcol = imgcol.filterDate(date_begin, date_end);
