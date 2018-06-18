@@ -47,4 +47,6 @@ var date_begin = '2017-08-31',//'2000-02-01',
     
 imgcol = imgcol.filterDate(date_begin, date_end);
 
+ var ET  =('b("Ec") + b("Es")+ b("Ei")').rename('ET'); // + b("Ei")
+
 pkg_export.ExportImgCol(imgcol.select('ET'), undefined, range, cellsize, type, folder, crs);
