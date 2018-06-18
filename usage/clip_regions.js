@@ -34,7 +34,7 @@ imgcol = imgcol.map(function(img){ return img.clip(region); });
 // Map.addLayer(region);
 
 // var range  = [-180, -60, 180, 90];
-var scale  = 1 / 20, //1/240,
+var scale  = 1 / 240, //1/240,
     drive  = true,
     folder = 'PMLV2basin', 
     crs    = 'EPSG:4326'; //
