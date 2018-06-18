@@ -49,4 +49,6 @@ imgcol = imgcol.filterDate(date_begin, date_end);
 
  var ET  =('b("Ec") + b("Es")+ b("Ei")').rename('ET'); // + b("Ei")
 
-pkg_export.ExportImgCol(imgcol.select('ET'), undefined, range, cellsize, type, folder, crs);
+//pkg_export.ExportImgCol(imgcol.select('ET'), undefined, range, cellsize, type, folder, crs);
+
+pkg_export.ExportImgCol(ET, undefined, range, cellsize, type, folder, crs);
