@@ -48,15 +48,15 @@ var date_begin = '2017-08-31',//'2000-02-01',
 imgcol = imgcol.filterDate(date_begin, date_end);
 
 // Function to compute ET using an expression.
-  var ET = function(image){
-    return image.expression(
-      ('b("Ec") + b("Es")+ b("Ei")'), {
-        'Ec': image.select('Ec'),
-        'Es': image.select('Es'),
-		'Ei': image.select('Ei')
-  }).rename('ET');
-  };
+//  var ET = function(image){
+//    return image.expression(
+//      ('b("Ec") + b("Es")+ b("Ei")'), {
+//        'Ec': image.select('Ec'),
+//        'Es': image.select('Es'),
+//		'Ei': image.select('Ei')
+//  }).rename('ET');
+//  };
 
-//pkg_export.ExportImgCol(imgcol.select('ET'), undefined, range, cellsize, type, folder, crs);
+pkg_export.ExportImgCol(imgcol.select([1,2,3,4], undefined, range, cellsize, type, folder, crs);
 
-pkg_export.ExportImgCol(ET, undefined, range, cellsize, type, folder, crs);
+
