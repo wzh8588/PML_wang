@@ -57,6 +57,6 @@ imgcol = imgcol.filterDate(date_begin, date_end);
 //  }).rename('ET');
 //  };
 
-pkg_export.ExportImgCol(imgcol.select([1,2,3,4], undefined, range, cellsize, type, folder, crs);
+pkg_export.ExportImgCol(imgcol.select([1,2,3,4]), undefined, range, cellsize, type, folder, crs);
 
 
