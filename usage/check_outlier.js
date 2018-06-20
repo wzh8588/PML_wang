@@ -3,8 +3,9 @@ var imgcol_pmlv2 = ee.ImageCollection("projects/pml_evapotranspiration/PML/OUTPU
     imgcol_lai = ee.ImageCollection("MODIS/006/MCD15A3H"),
     imgcol_evi = ee.ImageCollection("MODIS/006/MOD13A1"),
     img_gde = ee.Image("projects/pml_evapotranspiration/Cooper/COO_GDEs"),
-    poly = ee.FeatureCollection("projects/pml_evapotranspiration/Cooper/COO_gde_poly"),
-    poly0 = ee.FeatureCollection("projects/pml_evapotranspiration/Cooper/COO_Lat_Lon");
+    poly1 = ee.FeatureCollection("projects/pml_evapotranspiration/Cooper/COO_gde_poly"),
+    poly0 = ee.FeatureCollection("projects/pml_evapotranspiration/Cooper/COO_Lat_Lon"),
+    poly = ee.FeatureCollection("projects/pml_evapotranspiration/Cooper/COO_nogde_poly");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /**
  * PML_V2 usage illustration 
