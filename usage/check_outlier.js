@@ -3,9 +3,8 @@ var imgcol_pmlv2 = ee.ImageCollection("projects/pml_evapotranspiration/PML/OUTPU
     imgcol_lai = ee.ImageCollection("MODIS/006/MCD15A3H"),
     imgcol_evi = ee.ImageCollection("MODIS/006/MOD13A1"),
     img_gde = ee.Image("projects/pml_evapotranspiration/Cooper/COO_GDEs"),
-    poly1 = ee.FeatureCollection("projects/pml_evapotranspiration/Cooper/COO_gde_poly"),
-    poly0 = ee.FeatureCollection("projects/pml_evapotranspiration/Cooper/COO_Lat_Lon"),
-    poly = ee.FeatureCollection("projects/pml_evapotranspiration/Cooper/COO_NonGDE_poly");
+    poly = ee.FeatureCollection("projects/pml_evapotranspiration/Cooper/COO_gde_poly"),
+    poly0 = ee.FeatureCollection("projects/pml_evapotranspiration/Cooper/COO_Lat_Lon");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /**
  * PML_V2 usage illustration 
@@ -18,7 +17,7 @@ var pkg_export = require('users/kongdd/public:pkg_export.js');
 
 imgcol_pmlv2 = imgcol_pmlv2.select([0, 1, 2, 3])
     .map(function(img){
-        return img.clip(poly).divide(100)
+        return img.clip(poly0).divide(100)
             .copyProperties(img, ['system:time_start']);
     });
 
@@ -59,7 +58,7 @@ Map.add(label);
 
 series(imgcol_pmlv2, {}, 'imgcol_pmlv2 8-day', poly0, label);
 // Map.centerObject(poly, 8);
-Map.addLayer(poly, {}, 'BASIN');
+// Map.addLayer(poly, {}, 'BASIN');
 // Map.addLayer(img_gde, {}, 'gde');
 
 // Map.addLayer(imgcol_perc, {}, 'imgcol_perc');
