@@ -1,14 +1,15 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var img_gde = ee.Image("users/zhangyq/COO_GDEs"),
-    imgcol_pmlv2 = ee.ImageCollection("projects/pml_evapotranspiration/PML/OUTPUT/PML_V2_8day"),
+var imgcol_pmlv2 = ee.ImageCollection("projects/pml_evapotranspiration/PML/OUTPUT/PML_V2_8day"),
     imgcol_lai = ee.ImageCollection("MODIS/006/MCD15A3H"),
     imgcol_evi = ee.ImageCollection("MODIS/006/MOD13A1"),
-    poly = ee.FeatureCollection("projects/pml_evapotranspiration/Australia/COO_Lat_Lon");
+    img_gde = ee.Image("projects/pml_evapotranspiration/Cooper/COO_GDEs"),
+    poly1 = ee.FeatureCollection("projects/pml_evapotranspiration/Cooper/COO_gde_poly"),
+    poly = ee.FeatureCollection("projects/pml_evapotranspiration/Cooper/COO_Lat_Lon");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /**
  * PML_V2 usage illustration 
  * 
- * Dongdong Kong, 22 March, 2018
+ * Dongdong Kong, 22 June, 2018
  */
 var pkg_vis    = require('users/kongdd/public:pkg_vis.js');
 var pkg_export = require('users/kongdd/public:pkg_export.js');
@@ -16,7 +17,8 @@ var pkg_export = require('users/kongdd/public:pkg_export.js');
 
 imgcol_pmlv2 = imgcol_pmlv2.select([0, 1, 2, 3])
     .map(function(img){
-        return img.clip(poly).divide(100);
+        return img.clip(poly).divide(100)
+            .copyProperties(img, ['system:time_start']);
     });
 
 /** 1. visualization */ 
@@ -51,10 +53,10 @@ var imgcol_perc = imgcol_pmlv2.map(function(img){
 var label = ui.Label('text');
 Map.add(label);
 
-var region = img_gde.geometry();
-Map.addLayer(region, {}, 'aggregate region');
+// var region = img_gde.geometry();
+// Map.addLayer(region, {}, 'aggregate region');
 
-series(imgcol_pmlv2, {}, 'Annual GPP', poly, label);
+series(imgcol_pmlv2, {}, 'imgcol_pmlv2 8-day', poly, label);
 // Map.centerObject(poly, 8);
 // Map.addLayer(poly, {}, 'BASIN');
 // Map.addLayer(img_gde, {}, 'gde');
@@ -73,7 +75,7 @@ function series(ImgCol, vis, name, region, label) {
         imageCollection: ImgCol, //['ETsim', 'Es', 'Eca', 'Ecr', 'Es_eq']
         region         : region,
         reducer        : ee.Reducer.mean(),
-        scale          : 2000
+        scale          : 500
     });
 
     // When the chart is clicked, update the map and label.
