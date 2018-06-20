@@ -17,7 +17,7 @@ var pkg_export = require('users/kongdd/public:pkg_export.js');
 
 imgcol_pmlv2 = imgcol_pmlv2.select([0, 1, 2, 3])
     .map(function(img){
-        return img.clip(poly0).divide(100)
+        return img.clip(poly).divide(100)
             .copyProperties(img, ['system:time_start']);
     });
 
