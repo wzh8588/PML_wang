@@ -5,7 +5,7 @@ var imgcol_pmlv2 = ee.ImageCollection("projects/pml_evapotranspiration/PML/OUTPU
     img_gde = ee.Image("projects/pml_evapotranspiration/Cooper/COO_GDEs"),
     poly1 = ee.FeatureCollection("projects/pml_evapotranspiration/Cooper/COO_gde_poly"),
     poly0 = ee.FeatureCollection("projects/pml_evapotranspiration/Cooper/COO_Lat_Lon"),
-    poly = ee.FeatureCollection("projects/pml_evapotranspiration/Cooper/COO_nogde_poly");
+    poly = ee.FeatureCollection("projects/pml_evapotranspiration/Cooper/COO_NonGDE_poly");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /**
  * PML_V2 usage illustration 
@@ -59,7 +59,7 @@ Map.add(label);
 
 series(imgcol_pmlv2, {}, 'imgcol_pmlv2 8-day', poly0, label);
 // Map.centerObject(poly, 8);
-// Map.addLayer(poly, {}, 'BASIN');
+Map.addLayer(poly, {}, 'BASIN');
 // Map.addLayer(img_gde, {}, 'gde');
 
 // Map.addLayer(imgcol_perc, {}, 'imgcol_perc');
