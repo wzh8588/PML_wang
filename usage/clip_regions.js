@@ -28,8 +28,8 @@ print(range);
 // Map.addLayer(bound, {}, 'bounds');
 /** clip regional data */
 // imgcol = imgcol.map(function(img){ return img.clip(region); });
-range = [137, -31, 147, -20];
-
+// range = [137, -31, 147, -20];
+range = [73, 25, 105, 40];
 // print(region);
 // print(imgcol.limit(10));
 // Map.addLayer(region);
@@ -37,7 +37,7 @@ range = [137, -31, 147, -20];
 // var range  = [-180, -60, 180, 90];
 var cellsize = 1 / 240, //1/240,
     type   = 'drive',
-    folder = 'PMLV2AU', 
+    folder = 'PMLV2TP', 
     crs    = 'EPSG:4326'; //
 
 var date_begin = '2002-07-04', 
