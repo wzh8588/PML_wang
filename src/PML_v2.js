@@ -1,11 +1,11 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var ImgCol_land = ee.ImageCollection("projects/pml_evapotranspiration/PML_INPUTS/MODIS/MCD12Q1_006"),
-    point = /* color: #d63000 */ee.Geometry.Point([-118.01513671875, 38.11727165830543]),
+var point = /* color: #d63000 */ee.Geometry.Point([-118.01513671875, 38.11727165830543]),
     ImgCol_gldas = ee.ImageCollection("projects/pml_evapotranspiration/PML_INPUTS/GLDAS_v21_8day"),
     co2 = ee.FeatureCollection("ft:1trgP0M8MslxSolLNQFY-utpFlC2a14ySSFaZegy5"),
     imgcol_albedo = ee.ImageCollection("projects/pml_evapotranspiration/PML_INPUTS/MODIS/Albedo_interp_8d_v2"),
     imgcol_emiss = ee.ImageCollection("projects/pml_evapotranspiration/PML_INPUTS/MODIS/Emiss_interp_8d"),
-    imgcol_lai_4d = ee.ImageCollection("projects/pml_evapotranspiration/PML_INPUTS/MODIS/LAI_whit_4d");
+    imgcol_lai_4d = ee.ImageCollection("projects/pml_evapotranspiration/PML_INPUTS/MODIS/LAI_whit_4d"),
+    imgcol_land = ee.ImageCollection("MODIS/006/MCD12Q1");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /**
  * PML_V2 (Penman-Monteith-Leuning) model 
@@ -42,6 +42,7 @@ var pkg_trend  = require('users/kongdd/public:Math/pkg_trend.js');
 var pkg_export = require('users/kongdd/public:pkg_export.js');
 // var points     = require('users/kongdd/public:data/flux_points.js').points;
 
+var prj = pkg_export.getProj(imgcol_land);
 /**
 MODIS 005 IGBP land cover code
 % 0 Water Bodies
@@ -77,7 +78,7 @@ var crs_trans = [463.3127165279165, 0, -20015109.353988  , 0, -463.3127165274999
 // var crs_trans     = [926.6249485966824, 0, -20015098.889688343, 0, -926.6254331387692, 10007554.677898707];
     
 /** fix MCD12Q1_006 land cover code. */
-ImgCol_land = ImgCol_land.map(function(land){
+var ImgCol_land = imgcol_land.select(0).map(function(land){
     //for MCD12Q1_006 water and unc type is inverse
     land = land.remap([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], 
         [17, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 0]); 
@@ -601,11 +602,6 @@ function PML(year, v2) {
         /** Export ImgCol into asset */
         var save = true;
         if (save){
-            var range     = [-180, -60, 180, 90],
-                cellsize  = 1 / 240, //1/240,
-                type      = 'asset',
-                folder    = asset,
-                crs       = 'SR-ORG:6974'; //projects/pml_evapotranspiration
             // print('hello', PML_Imgs, dates);
             var img = ee.Image(PML_Imgs.first());
             // img = img.select(ee.List.sequence(0, 4)); //rm qc band
@@ -635,34 +631,60 @@ function PML(year, v2) {
 }
 
 var exec = true;
+var range     = [-180, -60, 180, 90],
+    cellsize  = 1 / 240, //1/240,
+    type      = 'asset',
+    crs       = 'SR-ORG:6974', //projects/pml_evapotranspiration
+    crsTransform = prj.crsTransform;
+    
 if (exec) {
     var PMLV2 = true; //If false, PML_V1 will be used!
-    var bands, asset;
+    var bands, folder;
     if (PMLV2) {
         bands = ['GPP', 'Ec', 'Es', 'Ei', 'ET_water', 'qc']; //,'qc'
-        asset = 'projects/pml_evapotranspiration/PML/OUTPUT/PML_V2_8day';//'projects/pml_evapotranspiration/PML_v2';
+        folder = 'projects/pml_evapotranspiration/PML/OUTPUT/PML_V2_8day';//'projects/pml_evapotranspiration/PML_v2';
     } else {
         bands = ['Ec', 'Es', 'Ei', 'ET_water', 'qc'];
-        asset = 'projects/pml_evapotranspiration/PML/OUTPUT/PML_V1_8day';
+        folder = 'projects/pml_evapotranspiration/PML/OUTPUT/PML_V1_8day';
     }
 
     var year  = 2003,
-        year_begin = 2007, 
-        year_end   = year_begin + 3,
+        year_begin = 2003, 
+        year_end   = 2017, //year_begin + 3,
         save  = true, //global param called in PML_main
-        debug = true;
+        debug = false;
 
     var imgcol_PML, img_year;
-    var beginDate, ydays;
+    var begin_date, ydays;
     
     if (debug) {
-        ydays = ee.Date.fromYMD(year+1,1,1).difference()   
+        begin_date = ee.Date.fromYMD(year,1,1);
+        ydays = begin_date.advance(1, 'year').difference(begin_date, 'day');
+        
         imgcol_PML = PML(year, PMLV2);
-        img_year = imgcol_PML.select(bands.slice(0, -1)).sum();
-        print('imgcol_PML', imgcol_PML, img_year)
+        img_year = imgcol_PML.select(bands.slice(0, -1)).mean().multiply(ydays)
+            .set('system:time_start', begin_date.millis())
+            .set('system:id', begin_date.format('YYYY-MM-dd'));
+        
+        print('imgcol_PML', ydays, imgcol_PML, img_year);
     } else {
+        // export parameter for yearly PML
+        var folder_yearly = 'projects/pml_evapotranspiration/PML/v012/PML_V2_yearly/';
+        var task;
+        
         for (var year = year_begin; year <= year_end; year++){
+            begin_date = ee.Date.fromYMD(year,1,1);
+            task = begin_date.format('YYYY-MM-dd').getInfo();
+            
+            ydays = begin_date.advance(1, 'year').difference(begin_date, 'day');
+            
             imgcol_PML = PML(year, PMLV2);
+            img_year = imgcol_PML.select(bands.slice(0, -1)).mean().multiply(ydays)
+                .set('system:time_start', begin_date.millis())
+                .set('system:id', task);
+            
+            pkg_export.ExportImg_deg(img_year, task, range, cellsize, type, folder_yearly, crs, crsTransform);
+            // pkg_export.ExportImgCol(PML_Imgs, dates, range, scale, type, folder, crs);
         }
     }
 }
