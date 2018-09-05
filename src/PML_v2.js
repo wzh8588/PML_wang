@@ -114,8 +114,10 @@ function print_1th(imgcol){
 }
 
 if (I_interp){
-    var imgcol_lai = ee.ImageCollection( imgcol_lai_4d.map(pkg_main.bandsToImgCol).flatten() )
-        .map(function(img){ return img.addBands(img.multiply(0.1)).select([1]);}); //scale factor 0.1
+    var imgcol_lai = ee.ImageCollection( imgcol_lai_4d.toList(10).map(function(img){
+        return pkg_main.bandsToImgCol(img, 'LAI');
+    }).flatten() )
+        .map(function(img){ return img.multiply(0.1).copyProperties(img, img.propertyNames());}); //scale factor 0.1
     imgcol_lai   = ee.ImageCollection(imgcol_lai.toList(2000));
 
     imgcol_emiss = ee.ImageCollection(imgcol_emiss.toList(1000))
@@ -137,7 +139,7 @@ if (I_interp){
 } else {
     /** No Interpolation MODIS INPUTS */
     imgcol_lai = ee.ImageCollection('MODIS/006/MCD15A3H').select('Lai')
-            .map(function(img){ return img.addBands(img.multiply(0.1)).select([1]);}); //scale factor 0.1
+            .map(function(img){ return img.multiply(0.1).copyProperties(img, img.propertyNames());}); //scale factor 0.1
 
     imgcol_emiss = ee.ImageCollection('MODIS/006/MOD11A2')
         .select(['Emis_31', 'Emis_32'])
@@ -147,7 +149,7 @@ if (I_interp){
         }).select([0], ['Emiss']);
 
     var Albedo_raw = ee.ImageCollection('MODIS/006/MCD43A3').select(['Albedo_WSA_shortwave'])
-            .map(pkg_trend.add_d8(true));
+            .map(pkg_trend.add_dn(true));
     imgcol_albedo = pkg_trend.aggregate_prop(Albedo_raw, 'd8', 'mean')
         .map(function(img) {return img.addBands(img.multiply(0.001)).select([1]);})
         .select([0], ['Albedo']);
@@ -184,13 +186,15 @@ function PML_INPUTS_d8(begin_year, end_year){
     //     .sort("system:time_start");
     
     var LAI_d4  = imgcol_lai.filter(filter_date);//.merge(lai_miss);
-    LAI_d4      = LAI_d4.map(pkg_trend.add_d8(true));
+    LAI_d4      = LAI_d4.map(pkg_trend.add_dn(true, 8));
     
-    var LAI_d8 = pkg_trend.aggregate_prop(LAI_d4, 'd8', 'mean').select([0], ['LAI']);
+    var LAI_d8 = pkg_trend.aggregate_prop(LAI_d4, 'dn', 'mean').select([0], ['LAI']);
+    // print(LAI_d4, LAI_d8, 'LAI_d8');
+    
     LAI_d8 = LAI_d8.map(function(img){
         return img.updateMask(img.gte(0)).unmask(0); //.mask(land_mask); // LAI[LAI < 0] <- 0
     });
-    // print(LAI_d4, 'LAI_d4');
+    
     // LAI has missing images, need to fix in the future
     
     var Albedo_d8 = imgcol_albedo.filter(filter_date);
@@ -199,6 +203,7 @@ function PML_INPUTS_d8(begin_year, end_year){
     var modis_input = pkg_join.SaveBest(Emiss_d8, LAI_d8);
     modis_input     = pkg_join.SaveBest(modis_input, Albedo_d8);
     
+    // print(modis_input);
     if (I_interp){
         // add qc bands
         modis_input = modis_input.map(function(img){
@@ -322,6 +327,7 @@ function vapor_pressure(t) {
  *     `PML_daily` has all the access of yearly land cover based parameters 
  *     (e.g. gsx, hc, LAIref, S_sls). 
  *     
+ * 
  *     -- PML_year(INPUTS)
  *     
  * @param {Integer} year Used to filter landcover data and set landcover depend parameters.
@@ -541,7 +547,9 @@ function PML(year, v2) {
         if (v2) newImg = newImg.addBands(GPP); //PML_V2
         
         newImg = newImg.updateMask(mask_water.not()).addBands(ET_water); //add ET_water
-        newImg = newImg.multiply(1e2).toUint16(); //CONVERT INTO UINT16
+        // Comment 2018-09-05, to get yearly sum, it can be converted to uint16
+        // otherwise, it will be out of range.
+        // newImg = newImg.multiply(1e2).toUint16(); //CONVERT INTO UINT16 
         
         if (I_interp){
             var qc = img.select('qc');  
@@ -577,7 +585,7 @@ function PML(year, v2) {
         /** 4. calculate Es */
         var PML_Imgs_0 = pkg_join.SaveBest(PML_ImgsRaw, fval_soil); //.sort('system:time_start'); 
         var PML_Imgs = PML_Imgs_0.map(function(img) {
-            var Es = img.expression('b("Es_eq") * b("fval_soil")').toUint16().rename('Es');
+            var Es = img.expression('b("Es_eq") * b("fval_soil")').rename('Es'); //.toUint16()
             // var ET = img.expression('b("Ec") + b("Ei") + Es', { Es: Es }).rename('ET');
             return img.addBands(Es); //ET
         }).select(bands); //, 'ET_water'
@@ -644,10 +652,14 @@ if (exec) {
         save  = true, //global param called in PML_main
         debug = true;
 
-    var imgcol_PML;
+    var imgcol_PML, img_year;
+    var beginDate, ydays;
+    
     if (debug) {
+        ydays = ee.Date.fromYMD(year+1,1,1).difference()   
         imgcol_PML = PML(year, PMLV2);
-        print('imgcol_PML', imgcol_PML)
+        img_year = imgcol_PML.select(bands.slice(0, -1)).sum();
+        print('imgcol_PML', imgcol_PML, img_year)
     } else {
         for (var year = year_begin; year <= year_end; year++){
             imgcol_PML = PML(year, PMLV2);
