@@ -669,7 +669,7 @@ if (exec) {
         print('imgcol_PML', ydays, imgcol_PML, img_year);
     } else {
         // export parameter for yearly PML
-        var folder_yearly = 'projects/pml_evapotranspiration/PML/v012/PML_V2_yearly/';
+        var folder_yearly = 'projects/pml_evapotranspiration/PML/v012/PML_V2_yearly';
         var task;
         
         for (var year = year_begin; year <= year_end; year++){
