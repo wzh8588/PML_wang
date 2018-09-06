@@ -43,6 +43,13 @@ var pkg_export = require('users/kongdd/public:pkg_export.js');
 // var points     = require('users/kongdd/public:data/flux_points.js').points;
 
 var prj = pkg_export.getProj(imgcol_land);
+
+var I_interp    = true;
+// `meth_interp` is used to resample meteometeorological forcing into high-resolution
+// not suggest 'biculic'. bicubic can't constrain values in reasonable boundary.
+var meth_interp = 'bilinear'; // or 'bicubic'
+var filter_date_all = ee.Filter.date('2002-07-01', '2017-12-31');
+
 /**
 MODIS 005 IGBP land cover code
 % 0 Water Bodies
@@ -69,9 +76,6 @@ MODIS 005 IGBP land cover code
 0  | UNC
 17 | WATER
  */
-
-var I_interp = true;
-var filter_date_all  = ee.Filter.date('2002-07-01', '2017-12-31');
 
 /** fix MCD12Q1_006 land cover code. */
 var ImgCol_land = imgcol_land.select(0).map(function(land){
@@ -211,7 +215,7 @@ function PML_INPUTS_d8(begin_year, end_year){
     
     var gldas_input = ImgCol_gldas.filter(filter_date)
         .map(function(img){
-            return img.resample('bicubic').copyProperties(img, img.propertyNames());
+            return img.resample(meth_interp).copyProperties(img, img.propertyNames());
         });
     var pml_input   = pkg_join.InnerJoin(modis_input, gldas_input).sort("system:time_start");
     // Map.addLayer(pml_input, {}, 'pml_input');
@@ -366,7 +370,6 @@ function vapor_pressure(t) {
  * @return {ee.ImageCollection} An ImageCollection with the bands of 
  *                                 ['GPP', 'Ec', 'Es', 'Ei', 'ET_water','qc'] for PML_V2;
  *                                 ['Ec', 'Es', 'Ei', 'ET_water','qc'] for PML_V1;
- *
  */
 function PML(year, v2) {
     // fix landcover time range after 2013, 2014-2016
@@ -650,6 +653,7 @@ function PML(year, v2) {
     }
     
     var INPUTS = PML_INPUTS_d8(year);
+    // Map.addLayer(INPUTS, {}, 'INPUT');
     var dates = ee.List(INPUTS.aggregate_array('system:time_start'))
         .map(function(date) { return ee.Date(date).format('yyyy-MM-dd'); }).getInfo(); //DATES of INPUT
     
@@ -680,7 +684,7 @@ if (exec) {
         year_begin = 2003, 
         year_end   = 2010, //year_begin + 3,
         save  = true, //global param called in PML_main
-        debug = false;
+        debug = true;
 
     var imgcol_PML, img_year;
     var begin_date, ydays;
@@ -695,6 +699,10 @@ if (exec) {
             .set('system:id', begin_date.format('YYYY-MM-dd'));
         
         // print('imgcol_PML', ydays, imgcol_PML, img_year);
+        // check outliers
+        var img = imgcol_PML.first(); //img_year; //
+        var mask = img.select('Ec').expression('b() > 1e5 || b() < 0');
+        Map.addLayer(mask, {min:0, max:1, palette: ['white', 'red']}, 'mask');
         Map.addLayer(img_year, {}, 'img_year');
     } else {
         // export parameter for yearly PML
@@ -719,5 +727,5 @@ if (exec) {
 }
 
 exports = {
-  PML: PML
+    PML: PML
 };
