@@ -15,7 +15,7 @@ vegetation (Ei).
 
 *   PML_V2 data missing due to LAI images missing
     -   2018-07-28
-*   QQ交流群【gee_PML】：https://jq.qq.com/?_wv=1027&k=5J6RXXs
+*   QQ交流群【gee_PML】：https://jq.qq.com/?_wv=1027&k=5J6RXXs 欢迎有志之士加入开发、维护
 
 
 ![](doc/Figure1_flowchart_of_PML_V2.svg)
@@ -63,13 +63,13 @@ __*Note: Only PMLV1 is available currently.*__
 
 Click the following links to get the access. The corresponding links are:
 
-- Onedrive (resolution: 8-day, 0.05 deg)
+- Onedrive (resolution: 8-day, 0.05 deg; _suggest downloading with **[idm](http://www.internetdownloadmanager.com/)**_)
     * https://mail2sysueducn-my.sharepoint.com/:f:/g/personal/kongdd_mail2_sysu_edu_cn/EnbeL2oEkRdMntAsPQuSUq8BjVhN1TmFjEGjaKiADDSMZw?e=c4O915
 
-- GEE (resolution: 8-day, 500-m)
-    * PML_V1 https://code.earthengine.google.com/?asset=projects/pml_evapotranspiration/PML/OUTPUT/PML_V1_8day
-    * PML_V2 https://code.earthengine.google.com/?asset=projects/pml_evapotranspiration/PML/V2/8day
-
+- GEE (resolution: 8-day, 500-m; _suggest downloading with **[gee_monkey](https://github.com/kongdd/gee_monkey)**_)
+    * PML_V2: https://code.earthengine.google.com/?asset=projects/pml_evapotranspiration/PML/V2/8day
+    * PML_V1: https://code.earthengine.google.com/?asset=projects/pml_evapotranspiration/PML/OUTPUT/PML_V1_8day
+    
 
 ### 1.2 Data download
 PML products are standard `ee.ImageCollection` object in GEE.
