@@ -7,6 +7,18 @@ vegetation (Ei).
 
 `PML_V2 ` was developed by *Gan et al., (2018)* and *Zhang et al., (2019)*, which coupled ET and gross primary products via canopy conductance theory. They are both in the resolution of 500 m and 8-day, and range from -60°S to 90°N.
 
+## Updates
+
+* 2019-10-10: PML_V2 has been updated to 2019-08-29 (2002-07-04 -- 2019-08-29)
+
+## Known issues
+
+*   PML_V2 data missing due to LAI images missing
+    -   2018-07-28
+    
+QQ交流群【gee_PML】：https://jq.qq.com/?_wv=1027&k=5J6RXXs
+
+
 ![](doc/Figure1_flowchart_of_PML_V2.svg)
 
 **Figure 1**. Flowchart of global forcing data processing and `PML_V2` modeling processes. 
@@ -53,7 +65,7 @@ __*Note: Only PMLV1 is available currently.*__
 Click the following links to get the access. The corresponding links are:
 
 * PML_V1 https://code.earthengine.google.com/?asset=projects/pml_evapotranspiration/PML/OUTPUT/PML_V1_8day
-* PML_V2 https://code.earthengine.google.com/?asset=projects/pml_evapotranspiration/PML/OUTPUT/PML_V2_8day_v014
+* PML_V2 https://code.earthengine.google.com/?asset=projects/pml_evapotranspiration/PML/V2/8day
 
 ### 1.2 Data download
 PML products are standard `ee.ImageCollection` object in GEE.
@@ -68,15 +80,6 @@ You can clip regional data by polygon shapefile from `ee.ImageCollection`.
 2. For large regions, you have to download trough `ee.ImageCollection`.
 
 Clip and export the regional data you need by the polygon shapefile you uploaded. [This is a little example](https://code.earthengine.google.com/10ea4750eaae29097b118022fbf60a57).
-
-## Updates
-
-* 2019-08-02: extend the time period to 2018
-
-## Known issues
-
-*   PML_V2 data missing due to LAI images missing
-    -   2018-07-28
 
 ## **References:**
 
