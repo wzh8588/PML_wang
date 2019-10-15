@@ -50,7 +50,7 @@ vegetation (Ei).
 bands are some).
 __*Note: Only PMLV1 is available currently.*__
 
-| BandName | Units     | Scale    | Description|
+| BandName | Units     | scale_factor    | Description|
 | -------- | --------  | -------- | -------- |
 |GPP       | gC m-2 d-1|  0.01  | Gross primary product|
 |Ec | mm d-1 | 0.01 | Vegetation transpiration |
@@ -58,6 +58,8 @@ __*Note: Only PMLV1 is available currently.*__
 |Ei | mm d-1 | 0.01 | Interception from vegetation canopy |
 |ET_water | mm d-1 | 0.01 | Water body, snow and ice evaporation. Penman <br>evapotranspiration is regarded as actual evaporation for them. |
 |qc | - | - | Interpolation information for Albedo and Emissivity. <br>Bitmask for qc:<br>**Bits 0-2**: Emissivity interpolation information<br> 0: good value, no interpolation<br> 1: linear interpolation <br> 2: history 8-day average interpolation <br> 3: history monthly average interpolation<br>**Bits 3-5**: Albedo interpolation information <br> Same as Emissivity. |
+
+*real_value = pixel_val * scale_factor*
 
 ### 1.1 **Access data**
 
