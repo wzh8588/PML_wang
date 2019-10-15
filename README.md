@@ -48,7 +48,6 @@ vegetation (Ei).
 
 **Table 1**. `PML_V1` and `PML_V2 ` bands information (`PML_V1 ` have no GPP band, other
 bands are some).
-__*Note: Only PMLV1 is available currently.*__
 
 | BandName | Units     | scale_factor    | Description|
 | -------- | --------  | -------- | -------- |
@@ -59,7 +58,7 @@ __*Note: Only PMLV1 is available currently.*__
 |ET_water | mm d-1 | 0.01 | Water body, snow and ice evaporation. Penman <br>evapotranspiration is regarded as actual evaporation for them. |
 |qc | - | - | Interpolation information for Albedo and Emissivity. <br>Bitmask for qc:<br>**Bits 0-2**: Emissivity interpolation information<br> 0: good value, no interpolation<br> 1: linear interpolation <br> 2: history 8-day average interpolation <br> 3: history monthly average interpolation<br>**Bits 3-5**: Albedo interpolation information <br> Same as Emissivity. |
 
-*real_value = pixel_val * scale_factor*
+__*real_value = pixel_value * scale_factor*__
 
 ### 1.1 **Access data**
 
